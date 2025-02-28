@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Маршрут через несколько точек</title>
+        <!-- Подключаем API Яндекс.Карт -->
+        <script src="https://api-maps.yandex.ru/2.1/?apikey=ed56844f-d33f-415e-bf86-5674de6b7b4c&lang=ru_RU"></script>
+        <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .upload-form {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .upload-form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .upload-form input[type="file"] {
+            margin-bottom: 20px;
+        }
+        .upload-form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .upload-form button:hover {
+            background-color: #45a049;
+        }
+        .upload-form .add-file-button {
+            background-color: #008CBA;
+        }
+        .upload-form .add-file-button:hover {
+            background-color: #007B9E;
+        }
+    </style>
+    </head>
+    <body>
+        <form method="POST" enctype="multipart/form-data" class="telo_ui">
+            <div class="d_form_map">
+                <div class="name_marsh">
+                    <h4>Название:</h4>
+                    <textarea id="name_marsh_inp" class="hunt_on_reg" type="text"></textarea>
+
+                </div>
+
+                <div class="description_marsh">
+                    <h4 >Описание:</h4>
+                    <textarea id="description_marsh_inp" class="description_marsh_inp" type="text"></textarea>
+
+                </div>
+                <div id='tochki' class="tochki">
+                    <div class="div_forma_ts" >
+                        <div class="name_tochki">
+                            <h4>Название:</h4>
+                            <textarea id="textarea_name_p0" class="name_tochki_inp" type="text"></textarea>
+                        </div>
+
+                         <div class="description_tochki">
+                            <h4 >Описание:</h4>
+                            <textarea class="description_tochki_inp" type="text"></textarea>
+                         </div>
+                    </div>
+                </div>
+                <div class="tochki">
+                    <div id="file-inputs">
+            <!-- Первое поле для загрузки файла -->
+            <label for="photo1">Фотография 1:</label>
+            <input type="file" name="photos[]" accept=".jpg, .png" required><br>
+        </div>
+
+        <!-- Кнопка для добавления нового поля -->
+        <button type="button" class="add-file-button" onclick="addFileInput()">Добавить еще фото</button>
+
+        <!-- Кнопка отправки формы -->
+        <button type="submit">Загрузить фотографии</button>
+                </div>
+            </div>
+            <div class="d_map">
+                <div id="map" class="map">
+
+                </div>
+            </div>
+        </form>
+
+    <script>
+            var multiRoute;
+            // Функция для инициализации карты
+           async function initMap() {
+                // Ждем загрузки всех компонентов API
+                ymaps.ready(function () {
+                    // Определяем массив точек
+                    var points = [
+
+                    ];
+                    // Создаем многоугольник маршрута
+                    multiRoute = new ymaps.multiRouter.MultiRoute({
+                        referencePoints: points,
+                        params: {
+                            routingMode: 'pedestrian' // Режим пешехода
+                        }
+                    }, {
+                        // Настройки маршрута
+                        wayPointVisible: true, // Отображать точки маршрута
+                        routeStrokeColor: "#0000FF", // Синий цвет линии маршрута
+                        routeActiveStrokeWidth: 5 // Толщина линии маршрута
+                    }, {
+                        // Тип промежуточных точек, которые могут быть добавлены при редактировании.
+                        editorMidPointsType: "way",
+                        // В режиме добавления новых путевых точек запрещаем ставить точки поверх объектов карты.
+                        editorDrawOver: false
+                    });
+
+
+                    var buttonEditor = new ymaps.control.Button({
+                        data: { content: "Режим редактирования" }
+                    });
+
+                    buttonEditor.events.add("select", function () {
+                        //Включение режима редактирования.
+                        multiRoute.editor.start({
+                            addWayPoints: true,
+                            removeWayPoints: true
+                        });
+
+                    });
+
+                    buttonEditor.events.add("deselect", postRoutes);
+
+                    // Создаем карту
+                    var myMap = new ymaps.Map('map', {
+                        center: [56.838011, 60.597474],
+                        zoom: 10,
+                        controls: [buttonEditor, 'zoomControl', 'fullscreenControl', 'typeSelector', 'geolocationControl']
+                    }, {
+                        buttonMaxWidth: 300
+                    });
+
+                    // Добавляем мультимаршрут на карту.
+                    myMap.geoObjects.add(multiRoute);
+                    console.log(multiRoute.model.events);
+                    if (multiRoute.getRoutes().length > 0) {
+                        console.log('Маршруты построены:', multiRoute.getRoutes());
+                    } else {
+                        console.log('Маршруты не построены');
+                    }
+
+
+
+                });
+
+            }
+            async function postRoutes(){
+                // Теперь мы можем получить координаты путевых точек
+                        console.log('Привет');
+                        multiRoute.editor.stop();
+
+                        list = []
+                        names_obj =[]
+                        let waypoints =  multiRoute.model.getWayPoints();
+
+                        const geocodePromises = waypoints.map(waypoint => {
+                                list.push(waypoint.geometry._coordinates);
+                                return ymaps.geocode(waypoint.geometry._coordinates).then(function (res) {
+                                    var firstGeoObject = res.geoObjects.get(0);
+                                    var name = firstGeoObject.getAddressLine(); // Получаем название точки
+                                    names_obj.push(name);
+                                    return name; // Возвращаем имя для использования в Promise.all
+                                });
+                            });
+
+                            // Ждём завершения всех промисов
+                            const names = await Promise.all(geocodePromises);
+
+                            // Объединяем имена в одну строку
+                            const str_name = names.join(', ');
+
+
+
+
+                        console.log(list)
+                        console.log(names_obj.length)
+
+
+                        console.log('Названия точек:', names_obj);
+                        console.log('Объединённые названия:', str_name);
+
+                        create_div(names_obj.length)
+
+                        const response = await fetch(`/ui?list=${JSON.stringify(list)}&names_obj=${encodeURIComponent(str_name)}`);
+    console.log('Ответ от сервера:', await response.json());
+                          }
+
+
+            function create_div(count_obj){
+                let div_tochki = document.getElementById('tochki');
+                for (let i=1; i<count_obj; i++){
+                    new_point = document.createElement('div');
+                    new_point.classList.add("div_forma_ts");
+
+                    point_name = document.createElement('div');
+                    point_name.classList.add("name_tochki");
+
+                    text_name_label = document.createElement('h4');
+                    text_name_label.textContent = 'Название:';
+                    point_name.append(text_name_label);
+
+                    name_text_area = document.createElement('textarea');
+                    name_text_area.classList.add("name_tochki_inp");
+                    name_text_area.value=names_obj[i]
+                    name_text_area.name='textarea_name_p' + i
+                    point_name.append(name_text_area)
+
+                    new_point.append(point_name);
+
+                    point_desc = document.createElement('div');
+                    point_desc.classList.add("description_tochki");
+                    new_point.append(point_desc);
+
+                    text_desc_label = document.createElement('h4');
+                    text_desc_label.textContent = 'Описание:';
+                    point_desc.append(text_desc_label);
+
+                    desc_text_area = document.createElement('textarea');
+                    desc_text_area.classList.add("description_tochki_inp");
+                    point_desc.append(desc_text_area)
+
+                    name_text_area1 = document.getElementById('textarea_name_p0')
+                    name_text_area1.value=names_obj[0]
+                    name_text_area1.name='textarea_name_p' +  '0'
+
+
+
+
+
+
+
+
+
+                    div_tochki.append(new_point);
+                }
+
+            }
+            // Счетчик для уникальных имен полей
+                let fileInputCount = 1;
+
+                // Функция для добавления нового поля для загрузки файла
+                function addFileInput() {
+                fileInputCount++; // Увеличиваем счетчик
+
+                // Создаем новый элемент input
+                const newInput = document.createElement('input');
+                newInput.type = 'file';
+                newInput.name = 'photos[]'; // Имя поля (массив для серверной обработки)
+                newInput.accept = '.jpg, .png';
+                newInput.required = true;
+
+                // Создаем новый label
+                const newLabel = document.createElement('label');
+                newLabel.htmlFor = `photo${fileInputCount}`;
+                newLabel.textContent = `Фотография ${fileInputCount}:`;
+
+                // Добавляем label и input в контейнер
+                const fileInputsContainer = document.getElementById('file-inputs');
+                fileInputsContainer.appendChild(newLabel);
+                fileInputsContainer.appendChild(newInput);
+                fileInputsContainer.appendChild(document.createElement('br'));
+            }
+            // Запускаем функцию инициализации карты
+            ymaps.ready(initMap);
+
+        </script>
+    </body>
+</html>

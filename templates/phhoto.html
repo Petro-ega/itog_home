@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка любого количества фотографий</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .upload-form {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .upload-form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .upload-form input[type="file"] {
+            margin-bottom: 20px;
+        }
+        .upload-form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .upload-form button:hover {
+            background-color: #45a049;
+        }
+        .upload-form .add-file-button {
+            background-color: #008CBA;
+        }
+        .upload-form .add-file-button:hover {
+            background-color: #007B9E;
+        }
+    </style>
+</head>
+<body>
+    <h1>Загрузка любого количества фотографий</h1>
+
+    <!-- Форма для загрузки фотографий -->
+    <form class="upload-form" enctype="multipart/form-data" method="POST">
+        <div id="file-inputs">
+            <!-- Первое поле для загрузки файла -->
+            <label for="photo1">Фотография 1:</label>
+            <input type="file" name="photos[]" accept=".jpg, .png" required><br>
+        </div>
+
+        <!-- Кнопка для добавления нового поля -->
+        <button type="button" class="add-file-button" onclick="addFileInput()">Добавить еще фото</button>
+
+        <!-- Кнопка отправки формы -->
+        <button type="submit">Загрузить фотографии</button>
+    </form>
+
+    <script>
+        // Счетчик для уникальных имен полей
+        let fileInputCount = 1;
+
+        // Функция для добавления нового поля для загрузки файла
+        function addFileInput() {
+            fileInputCount++; // Увеличиваем счетчик
+
+            // Создаем новый элемент input
+            const newInput = document.createElement('input');
+            newInput.type = 'file';
+            newInput.name = 'photos[]'; // Имя поля (массив для серверной обработки)
+            newInput.accept = '.jpg, .png';
+            newInput.required = true;
+
+            // Создаем новый label
+            const newLabel = document.createElement('label');
+            newLabel.htmlFor = `photo${fileInputCount}`;
+            newLabel.textContent = `Фотография ${fileInputCount}:`;
+
+            // Добавляем label и input в контейнер
+            const fileInputsContainer = document.getElementById('file-inputs');
+            fileInputsContainer.appendChild(newLabel);
+            fileInputsContainer.appendChild(newInput);
+            fileInputsContainer.appendChild(document.createElement('br'));
+        }
+    </script>
+</body>
+</html>

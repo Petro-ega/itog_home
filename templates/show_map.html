@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>show_map</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+</head>
+<body>
+    <div class="ch">
+      <div class="button_back">
+                      <a class="link_btn" href="/general"> <img class="img_button_on_general" src="{{ url_for('static',filename='img/img_back.png') }}" alt=""> </a>
+                  </div>
+    </div>
+    <div class="under_sm">
+        <div class="skrol_f_map">
+            {% for i in range(g) %}
+                <div class="main">
+                    <div class="ph"></div>
+                    <div class="ph1">
+                        <div class="photo1"></div>
+                        <div class="photo2"></div>
+                    </div>
+
+                    <div class="txt">
+                        <h1>НАЗВАНИЕ</h1>
+                        <h3>djfhskj dhflksdhflksdjhfl ksjhflsdjhf kjsd hfk;sjdhfjdfhgkdfhgtldfshgdfh tgkhdfghdfg hdf;ghdfhg kdhgdfhg dfhgd </h3>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+</body>
+</html>

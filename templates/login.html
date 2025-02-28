@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+</head>
+<body>
+    <form method="post" class="telo_login">
+        {% if b==2 %}
+                <div class="div_color_reg">
+                    <h1 align="center"> Здравствуй новый путешественник </h1>
+                    <div class="d_for_inputs_on_reg">
+                        <input type="text" name="login" placeholder="Логин" class="hunt_on_reg" />
+                        <input type="text" name="first_name" placeholder="Имя" class="hunt_on_reg" />
+                        <input type="text" name="last_name" placeholder="Фамилия" class="hunt_on_reg" />
+                        <input type="password" name="password" placeholder="Пароль" class="hunt_on_reg" />
+                        <input type="password" name="password2" placeholder="Подтверждение пароля" class="hunt_on_reg" />
+                        <input type="submit" value="Стать путешественником" placeholder="Стать путешественником" class="btn_sbm_on_reg"/>
+                        <div class="btn_reg_on_reg" ><a class="link_btn" href="/login">Я бывалый путешественик</a></div>
+                    </div>
+                </div>
+
+
+        {% elif b == 1 %}
+
+
+                    <div class="div_color_lofin">
+                        <h1>Здравствуй старый друг</h1>
+                            <div class="d_for_inputs_on_log">
+                                <input type="text" name="login" placeholder="Логин" class="hunt_on_login" />
+                                <input type="password" name="password" placeholder="Пароль" class="hunt_on_login" />
+                                <input type="submit" value="Вперёд в путь" class="btn_sbm_on_login"/>
+                                <div class="btn_reg_on_login"><a class="link_btn" href="/reg" >Я новенький здесь</a></div>
+                            </div>
+                    </div>
+        {% endif %}
+    </form>
+</body>
+</html>

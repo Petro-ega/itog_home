@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+
+</head>
+<body>
+<div class="telo_login">
+    <div class="top_on_profile">
+        <div class="area_profile">
+            <div class="button_back">
+                      <a class="link_btn" href="/general"> <img class="img_button_on_general" src="{{ src_img_back }}" alt=""> </a>
+                  </div>
+            <div class="d_avatar">
+                <img class="img_avatar" src="{{ url_for('static',filename='img/i1.png') }}" alt="">
+            </div>
+            <div class="d_description">
+                <div class="name_on_profile"><h2>Name</h2></div>
+                <div class="descp_on_profile"><h4 class="text_dis"">{{ d }}</h4></div>
+            </div>
+        </div>
+    </div>
+    <div class="under_on_profile">
+        <div class="pynct">
+            <div id="pr_mr" class="pynctik">
+                пройденные маршруты
+            </div>
+            <div id="stat" class="pynctik">
+                статистика
+            </div>
+            <div id="sosd_mr" class="pynctik">
+                созданные маршруты
+            </div>
+            <div id="com" class="pynctik">
+                комментарии
+            </div>
+        </div>
+
+        <div class="under_profile">
+            <div class="fon_sk_prof">
+
+                <div id="s1" class="skrol_on_profile1">
+                {% for i in range(m) %}
+
+                    <div class="tabl_marsh">
+                        пройденный
+                    </div>
+
+                {% endfor %}
+            </div>
+
+                <div id="s2" class="skrol_on_profile2">
+                <div class="div_for_state">
+                    <h3>Создал: {{ add_m }}</h3>
+                    <h3>Прошел: {{ m }}</h3>
+                    <h3>Оценил: {{ l }}</h3>
+                </div>
+            </div>
+
+                <div id="s3" class="skrol_on_profile3">
+                {% for i in range(add_m) %}
+
+                    <div class="tabl_marsh">
+                        созданный
+                    </div>
+
+                {% endfor %}
+            </div>
+
+                <div id="s4" class="skrol_on_profile4">
+                    {% for i in range(m) %}
+
+                        <div class="tabl_ocen">
+                            <h4 align="center" class="h4_profile">fkjdhlkgjh dkfjhgkdljhf jdhfgkjdhf skhdfgljkhsgd fkjhgs ddhflgkjhd</h4>
+                        </div>
+
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+ <script>
+        function pr_mrf(){
+            document.getElementById("s1").style.display = "flex";
+            document.getElementById("s2").style.display = "none";
+            document.getElementById("s3").style.display = "none";
+            document.getElementById("s4").style.display = "none";
+            document.getElementById("pr_mr").style.border = "solid 4px #2E341F";
+            document.getElementById("stat").style.border = "solid 2px #2E341F";
+            document.getElementById("sosd_mr").style.border = "solid 2px #2E341F";
+            document.getElementById("com").style.border = "solid 2px #2E341F";
+        }
+        function statef(){
+            document.getElementById("s1").style.display = "none";
+            document.getElementById("s2").style.display = "flex";
+            document.getElementById("s3").style.display = "none";
+            document.getElementById("s4").style.display = "none";
+            document.getElementById("stat").style.border = "solid 4px #2E341F";
+            document.getElementById("pr_mr").style.border = "solid 2px #2E341F";
+            document.getElementById("sosd_mr").style.border = "solid 2px #2E341F";
+            document.getElementById("com").style.border = "solid 2px #2E341F";
+        }
+        function sosd_mrf(){
+            document.getElementById("s1").style.display = "none";
+            document.getElementById("s2").style.display = "none";
+            document.getElementById("s3").style.display = "flex";
+            document.getElementById("s4").style.display = "none";
+            document.getElementById("sosd_mr").style.border = "solid 4px #2E341F";
+            document.getElementById("stat").style.border = "solid 2px #2E341F";
+            document.getElementById("pr_mr").style.border = "solid 2px #2E341F";
+            document.getElementById("com").style.border = "solid 2px #2E341F";
+        }
+        function comf(){
+            document.getElementById("s1").style.display = "none";
+            document.getElementById("s2").style.display = "none";
+            document.getElementById("s3").style.display = "none";
+            document.getElementById("s4").style.display = "flex";
+            document.getElementById("com").style.border = "solid 4px #2E341F";
+            document.getElementById("sosd_mr").style.border = "solid 2px #2E341F";
+            document.getElementById("stat").style.border = "solid 2px #2E341F";
+            document.getElementById("pr_mr").style.border = "solid 2px #2E341F";
+
+        }
+        console.log(document.getElementById("p1"));
+        document.getElementById("pr_mr").addEventListener('click', pr_mrf);
+        document.getElementById("stat").addEventListener('click', statef);
+        document.getElementById("sosd_mr").addEventListener('click', sosd_mrf);
+        document.getElementById("com").addEventListener('click', comf);
+ </script>
+</body>
+</html>

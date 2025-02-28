@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>General</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+  </head>
+  <body>
+  <div class="top">
+      <div class="area_for_search">
+          <div class="search">
+              <div class="button1">
+                  <img class="img_button_on_general" src="{{ src_img_search }}" alt="">
+              </div>
+          </div>
+      </div>
+      <div class="area_for_button">
+
+          {% if current_user.is_authenticated %}
+              <div class="b_reg">
+
+                  <div class="button1">
+                      <a class="link_btn" href="/profile"> <img class="img_button_on_general" src="{{ src_img_profile }}" alt=""> </a>
+                  </div>
+                  <div class="button1" >
+                      <img src="" alt="">
+                      <a href="/out_akk">dfsfs</a>
+                  </div>
+                  <div class="button_add_form">
+                      <a class="link_btn" href="/add_form"> <img class="img_button_on_general" src="{{ src_img_add_form }}" alt=""> </a>
+                  </div>
+              </div>
+          {% else %}
+              <div class="b_no_reg">
+                  <div class="button1">
+                      <a class="link_btn" href="/login"><img class="img_button_on_general" src="{{ src_img_login }}" alt=""></a>
+
+              </div>
+              </div>
+          {% endif %}
+      </div>
+  </div>
+  <div class="under">
+      <div class="skrol">
+          {% for i in range(m) %}
+
+          <div class="tabl_marsh">
+              <a href="/show_map" class="link_div_map"></a>
+          </div>
+
+          {% endfor %}
+      </div>
+  </div>
+  </body>
+</html>
