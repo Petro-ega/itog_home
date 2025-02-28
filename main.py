@@ -188,6 +188,7 @@ def marsh():
         print(photo.filename)
         if photo.filename:  # Проверяем, что файл был загружен
             photo.save(f"uploads/{photo.filename}")
+            return redirect(url_for('general'))
     return render_template('ui.html', list=list, names_obj=names_obj, form=form)
 
 @app.route('/show_map')
